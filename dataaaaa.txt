@@ -1,0 +1,16 @@
+i want to now integarte this code into a gui using pyqt5 to make it a proper application 
+
+in gui i need to select the file to process measurements
+then i want a drop down to select the track initiation mode (3 step,5 step,7 step) which should have the track initiation mode 
+then i want a drop down to select the filter  (CV filter ,CA filter ,CT filter IMM filter ) which should have the filter options so i already have cv filter in my code so it should use that directly
+then i want a drop down to select the Association technique  (JPDA,Munkres ) which should have the Association technique options so it should perform JPDA if jpda is selected if munkres is selected it should perform munkres
+
+
+a button to process the data and all the outputs should be displayed in output box in the gui 
+
+then a button to perform the plotting which is finally generated using     plot_measurements(tracks)
+ the plot should be displayyed in a canvas in gui 
+and add a clear button to reset
+
+
+
