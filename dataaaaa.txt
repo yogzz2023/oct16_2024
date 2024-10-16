@@ -13,4 +13,53 @@ then a button to perform the plotting which is finally generated using     plot_
 and add a clear button to reset
 
 
+i want to add a extra  canvas next to output box in the gui for adding the this function 
 
+def plot_measurements(tracks):
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    for track in tracks:
+        times = [m[0][3] for m in track['measurements']]
+        measurements_x = [sph2cart(*m[0][:3])[0] for m in track['measurements']]
+        measurements_y = [sph2cart(*m[0][:3])[1] for m in track['measurements']]
+        measurements_z = [sph2cart(*m[0][:3])[2] for m in track['measurements']]
+
+        # Check if Sf is a list of state vectors or a single state vector
+        if isinstance(track['Sf'], list) and len(track['Sf']) == len(times):
+            Sf_x = [state[0] for state in track['Sf']]
+            Sf_y = [state[1] for state in track['Sf']]
+            Sf_z = [state[2] for state in track['Sf']]
+        else:
+            # If Sf is a single state vector, repeat it to match the length of times
+            Sf_x = [track['Sf'][0, 0]] * len(times)
+            Sf_y = [track['Sf'][1, 0]] * len(times)
+            Sf_z = [track['Sf'][2, 0]] * len(times)
+
+        ax.plot(times, measurements_x, label=f'Track {track["track_id"]} Measurement X', marker='o')
+        ax.plot(times, Sf_x, label=f'Track {track["track_id"]} Sf X', linestyle='--')
+
+    ax.set_xlabel('Time')
+    ax.set_ylabel('X Coordinate')
+    ax.set_title('Tracks X vs Time')
+    ax.legend()
+
+    # Add interactive data tips
+    cursor = mplcursors.cursor(hover=True)
+    @cursor.connect("add")
+    def on_add(sel):
+        index = sel.target.index
+        track_id = tracks[index // len(tracks[0]['measurements'])]['track_id']
+        measurement = tracks[index // len(tracks[0]['measurements'])]['measurements'][index % len(tracks[0]['measurements'])]
+        time = measurement[0][3]
+        sp = tracks[index // len(tracks[0]['measurements'])]['Sp']
+        sf = tracks[index // len(tracks[0]['measurements'])]['Sf']
+        plant_noise = tracks[index // len(tracks[0]['measurements'])]['Pf'][0, 0]  # Example of accessing plant noise
+
+        sel.annotation.set(text=f"Track ID: {track_id}\nMeasurement: {measurement}\nTime: {time}\nSp: {sp}\nSf: {sf}\nPlant Noise: {plant_noise}")
+
+    plt.show()
+
+so on click on plot button the plot should come in that canvas part of gui 
+
+
+do the changes to my existing code and give full integrated  code
